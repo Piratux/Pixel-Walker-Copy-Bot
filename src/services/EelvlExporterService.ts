@@ -1,5 +1,5 @@
 import { ByteArray } from '@/classes/ByteArray.ts'
-import { EelvlBlockId, hasEelvlBlockOneIntParameter, isEelvlNpc } from '@/enums/EelvlBlockId.ts'
+import { EelvlBlockId, hasEelvlBlockOneIntParameter, hasEelvlBlockOneUIntParameter, hasEelvlBlockTwoIntParameters, isEelvlNpc } from '@/enums/EelvlBlockId.ts'
 import { getPwGameWorldHelper, usePWClientStore } from '@/stores/PWClientStore.ts'
 import { Block, LayerType } from 'pw-js-world'
 import { EelvlBlock } from '@/types/EelvlBlock.ts'
@@ -110,10 +110,10 @@ function mapLayerPwToEelvl(pwLayer: number) {
 }
 
 function getBlockEntryKey(eelvlBlockId: number, eelvlBlock: EelvlBlock, eelvlLayer: number) {
-  return [eelvlBlockId, eelvlLayer, ...getBlockArgs(eelvlBlockId, eelvlBlock)]
+  return [eelvlBlockId, eelvlLayer, ...getBlockArgs(eelvlBlockId, eelvlBlock, eelvlLayer)]
 }
 
-function getBlockArgs(eelvlBlockId: number, eelvlBlock: EelvlBlock) {
+function getBlockArgs(eelvlBlockId: number, eelvlBlock: EelvlBlock, eelvlLayer: number) {
   switch (eelvlBlockId) {
     case EelvlBlockId.PORTAL:
     case EelvlBlockId.PORTAL_INVISIBLE:
@@ -125,8 +125,12 @@ function getBlockArgs(eelvlBlockId: number, eelvlBlock: EelvlBlock) {
     case EelvlBlockId.LABEL:
       return [eelvlBlock.labelText, eelvlBlock.labelTextColor, eelvlBlock.labelWrapLength]
     default:
-      if (hasEelvlBlockOneIntParameter(eelvlBlockId)) {
+      if (hasEelvlBlockOneIntParameter(eelvlBlockId, eelvlLayer)) {
         return [eelvlBlock.intParameter]
+      } else if (hasEelvlBlockTwoIntParameters(eelvlBlockId, eelvlLayer)) {
+          return [eelvlBlock.intParameter, eelvlBlock.intParameterTwo]
+      } else if (hasEelvlBlockOneUIntParameter(eelvlBlockId)) {
+        return [eelvlBlock.uintParameter]
       } else if (isEelvlNpc(eelvlBlockId)) {
         return [eelvlBlock.npcName, eelvlBlock.npcMessage1, eelvlBlock.npcMessage2, eelvlBlock.npcMessage3]
       } else {

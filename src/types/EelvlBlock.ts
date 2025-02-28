@@ -1,6 +1,8 @@
 export type EelvlBlock = {
   blockId: number
   intParameter?: number
+  intParameterTwo?: number
+  uintParameter?: number
   portalId?: number
   portalTarget?: number
   signText?: string

@@ -1,3 +1,5 @@
+import { EelvlLayer } from "./EelvlLayer";
+
 export enum EelvlBlockId {
   BASIC_WHITE = 1088,
   BASIC_GRAY = 9,
@@ -1168,9 +1170,41 @@ export enum EelvlBlockId {
   NPC_SNOWMAN = 1577,
   NPC_WALRUS = 1578,
   NPC_CRAB = 1579,
+
+  // EBE
+
+  // Counters
+  EBE_COUNTER_DOOR = 3011,
+  EBE_COUNTER_GATE = 3012,
+  EBE_COUNTER_CONSUMABLE = 3013,
+  EBE_COUNTER_REUSABLE = 3014,
+
+  // Coin Resetters
+  EBE_COIN_GOLD_RESETTER = 3015,
+  EBE_COIN_BLUE_RESETTER = 3016,
+
+  // HEX
+  EBE_HEX_FG_BASIC = 1200,
+  EBE_HEX_FG_TILE = 1201,
+  EBE_HEX_BG_BASIC = 636,
+  EBE_HEX_BG_SOLID= 3001,
+  EBE_HEX_BG_CANVAS = 632,
+  EBE_HEX_BG_CHECKER = 633,
+  EBE_HEX_BG_CAVE = 634,
+  EBE_HEX_BG_TILE = 635,
+  EBE_HEX_FG_SPIKE_CENTER = 1646,
+
+  // Vision
+
+  EBE_VISION_PASSIVE = 1644,
+  EBE_VISION_ACTIVE = 1643
 }
 
-export function hasEelvlBlockOneIntParameter(eelvlBlockId: number): Boolean {
+export function hasEelvlBlockOneIntParameter(eelvlBlockId: number, eelvlLayer: number): Boolean {
+  if (eelvlLayer === EelvlLayer.EBE_TRIBG) {
+    return !hasEelvlBlockTwoIntParameters(eelvlBlockId, eelvlLayer);
+  }
+
   return [
     EelvlBlockId.SCIFI_LASER_BLUE_CORNER_BOTTOMRIGHT,
     EelvlBlockId.SCIFI_LASER_BLUE_STRAIGHT_VERTICAL,
@@ -1324,6 +1358,36 @@ export function hasEelvlBlockOneIntParameter(eelvlBlockId: number): Boolean {
     EelvlBlockId.HAZARD_SPIKES_GREEN_UP,
     EelvlBlockId.HAZARD_SPIKES_BLUE_UP,
   ].includes(eelvlBlockId)
+}
+
+export function hasEelvlBlockTwoIntParameters(eelvlBlockId: number, layer: number): Boolean {
+  if (layer === 3) {
+    return [
+      EelvlBlockId.EBE_HEX_FG_BASIC,
+      EelvlBlockId.EBE_HEX_FG_TILE,
+      EelvlBlockId.EBE_HEX_BG_BASIC,
+      EelvlBlockId.EBE_HEX_BG_SOLID,
+      EelvlBlockId.EBE_HEX_BG_CANVAS,
+      EelvlBlockId.EBE_HEX_BG_CHECKER,
+      EelvlBlockId.EBE_HEX_BG_CAVE,
+      EelvlBlockId.EBE_HEX_BG_TILE,
+      EelvlBlockId.EBE_HEX_FG_SPIKE_CENTER,
+    ].includes(eelvlBlockId);
+  }
+  return [
+    EelvlBlockId.EBE_COUNTER_DOOR,
+    EelvlBlockId.EBE_COUNTER_GATE,
+    EelvlBlockId.EBE_COUNTER_CONSUMABLE,
+    EelvlBlockId.EBE_COUNTER_REUSABLE,
+  ].includes(eelvlBlockId);
+}
+
+
+export function hasEelvlBlockOneUIntParameter(eelvlBlockId: number): Boolean {
+  return [
+    EelvlBlockId.EBE_HEX_BG_SOLID,
+    EelvlBlockId.EBE_HEX_BG_CHECKER,
+  ].includes(eelvlBlockId);
 }
 
 export function isEelvlNpc(eelvlBlockId: number): Boolean {
